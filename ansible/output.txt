@@ -1,0 +1,42 @@
+##
+
+[17:55]$ lt
+total 32
+-rw-r--r--  1 ehf  staff   181B Jul  4 17:09 requirements.txt
+-rw-r--r--  1 ehf  staff   371B Jul  4 17:42 requirements.yml
+-rw-r--r--  1 ehf  staff   493B Jul  4 17:53 ansible.cfg
+-rw-r--r--  1 ehf  staff   489B Jul  4 17:54 py-venv.sh
+[17:55]$ source py-venv.sh
+Requirement already satisfied: pip==22.1.1 in /Users/ehf/.venvs/ansible-test/lib/python3.9/site-packages (22.1.1)
+WARNING: There was an error checking the latest version of pip.
+Requirement already satisfied: ansible==6.0.0 in /Users/ehf/.venvs/ansible-test/lib/python3.9/site-packages (from -r requirements.txt (line 1)) (6.0.0)
+Requirement already satisfied: ansible-core==2.13.1 in /Users/ehf/.venvs/ansible-test/lib/python3.9/site-packages (from -r requirements.txt (line 2)) (2.13.1)
+Requirement already satisfied: cffi==1.15.1 in /Users/ehf/.venvs/ansible-test/lib/python3.9/site-packages (from -r requirements.txt (line 3)) (1.15.1)
+Requirement already satisfied: cryptography==37.0.2 in /Users/ehf/.venvs/ansible-test/lib/python3.9/site-packages (from -r requirements.txt (line 4)) (37.0.2)
+Requirement already satisfied: Jinja2==3.1.2 in /Users/ehf/.venvs/ansible-test/lib/python3.9/site-packages (from -r requirements.txt (line 5)) (3.1.2)
+Requirement already satisfied: MarkupSafe==2.1.1 in /Users/ehf/.venvs/ansible-test/lib/python3.9/site-packages (from -r requirements.txt (line 6)) (2.1.1)
+Requirement already satisfied: packaging==21.3 in /Users/ehf/.venvs/ansible-test/lib/python3.9/site-packages (from -r requirements.txt (line 7)) (21.3)
+Requirement already satisfied: pycparser==2.21 in /Users/ehf/.venvs/ansible-test/lib/python3.9/site-packages (from -r requirements.txt (line 8)) (2.21)
+Requirement already satisfied: pyparsing==3.0.9 in /Users/ehf/.venvs/ansible-test/lib/python3.9/site-packages (from -r requirements.txt (line 9)) (3.0.9)
+Requirement already satisfied: PyYAML==6.0 in /Users/ehf/.venvs/ansible-test/lib/python3.9/site-packages (from -r requirements.txt (line 10)) (6.0)
+Requirement already satisfied: resolvelib==0.8.1 in /Users/ehf/.venvs/ansible-test/lib/python3.9/site-packages (from -r requirements.txt (line 11)) (0.8.1)
+WARNING: There was an error checking the latest version of pip.
+Starting galaxy collection install process
+Nothing to do. All requested collections are already installed. If you want to reinstall them, consider using `--force`.
+Starting galaxy role install process
+- extracting update-os-ubuntu to /Users/ehf/Workspace/git/ansible-test/roles/update-os-ubuntu
+- update-os-ubuntu (main) was installed successfully
+- extracting network-cisco to /Users/ehf/Workspace/git/ansible-test/roles/network-cisco
+- network-cisco (v1.0.1) was installed successfully
+Starting galaxy collection install process
+Nothing to do. All requested collections are already installed. If you want to reinstall them, consider using `--force`.
+(ansible-test) [17:55]$ lt
+total 32
+-rw-r--r--  1 ehf  staff   181B Jul  4 17:09 requirements.txt
+-rw-r--r--  1 ehf  staff   371B Jul  4 17:42 requirements.yml
+-rw-r--r--  1 ehf  staff   493B Jul  4 17:53 ansible.cfg
+-rw-r--r--  1 ehf  staff   489B Jul  4 17:54 py-venv.sh
+drwxr-xr-x  4 ehf  staff   128B Jul  4 17:55 roles/
+(ansible-test) [17:55]$
+
+##
