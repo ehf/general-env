@@ -1,0 +1,19 @@
+---
+# ansible-galaxy collection install community.general
+# ansible-galaxy collection list
+# time ansible-inventory -i list-nmap.yml --graph
+#
+plugin: community.general.nmap
+##address: "10.10.10-20.1-254"
+##address: "10.10.10.1-20"
+address: "10.10.10.88-120"
+strict: False
+ports: False
+ipv4: True
+ipv6: False
+groups:
+  subnet_10: "'10.10.10' in inventory_hostname"
+  subnet_17: "'10.10.17' in inventory_hostname"
+  subnet_18: "'10.10.18' in inventory_hostname"
+  subnet_19: "'10.10.19' in inventory_hostname"
+  subnet_20: "'10.10.20' in inventory_hostname"
