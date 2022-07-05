@@ -1,0 +1,18 @@
+---
+collections:
+  - name: community.general
+    version: "5.2.0"
+
+roles:
+  #- src: git+ssh://git@github.com:ehf/el7-common.git
+  #  version: v2.0.0
+  #  name: el7-common
+
+  - src: https://github.com/ehf/update-os-ubuntu.git
+    version: main
+    name: update-os-ubuntu
+
+  - src: https://github.com/ehf/network-cisco.git
+    version: v1.0.1
+    name: network-cisco
+
