@@ -49,3 +49,21 @@
       when: "'java' in ansible_facts.packages" 
   
   
+
+### 
+
+--- 
+
+- hosts: all 
+  gather_facts: True
+  become: True
+  tasks: 
+    - name: "install pkgs"
+      package: 
+        name: "{{ item }}"
+        state: present
+      loop:
+        - sendmail
+        
+        
+        
