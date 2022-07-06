@@ -1,0 +1,17 @@
+
+# ansible-galaxy role init common
+
+# vi common/tasks/main.yml 
+
+###############
+---
+
+- include_tasks: redhat.yml
+  when: ansible_os_family == "RedHat"
+  tags:
+    - rhel-common
+
+- include_tasks: debian.yml
+  when: ansible_os_family == "Debian"
+  tags:
+    - debian-common
