@@ -22,5 +22,10 @@
 --- 
 
 - hosts: all
+  gather_facts: True
   roles:
     - common
+
+- import_playbook: vmware.yml
+
+
