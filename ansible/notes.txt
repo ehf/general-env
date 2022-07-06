@@ -29,3 +29,23 @@
 - import_playbook: vmware.yml
 
 
+#####
+---
+
+- hosts: all
+  gather_facts: True
+  tasks:
+    - name: "check pkgs installed" 
+      package_facts: 
+        manager: auto
+
+    - name: Print the package facts
+      debug:
+        var: ansible_facts.packages
+    
+    - name: "check if oracle jdk installed" 
+      debug:
+        msg: "jdk installed" 
+      when: "'java' in ansible_facts.packages" 
+  
+  
