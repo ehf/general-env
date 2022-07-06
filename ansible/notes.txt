@@ -15,3 +15,12 @@
   when: ansible_os_family == "Debian"
   tags:
     - debian-common
+
+
+# vi site.yml 
+
+--- 
+
+- hosts: all
+  roles:
+    - common
