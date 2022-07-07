@@ -1,0 +1,181 @@
+---
+
+##### enable sssd
+
+- name: "install nscd"
+  yum: 
+    name: nscd 
+    state: installed 
+    update_cache: yes
+  tags:
+    - nscd-conf
+    - sssd-conf
+    - setup-sssd
+
+- name: "deploy nscd.conf for caching hosts and services"
+  template: 
+    src: sssd/nscd.conf.j2 
+    dest: /etc/nscd.conf
+    owner: root
+    group: root 
+    mode: 0644 
+    backup: no
+  notify: restart nscd
+  tags:
+    - nscd-conf
+    - sssd-conf
+    - setup-sssd
+
+- name: "start nscd service"
+  service: 
+    name: nscd
+    state: started
+    enabled: yes
+  tags:
+    - nscd-conf
+    - sssd-conf
+    - setup-sssd
+
+- name: "install sssd-tools"
+  yum: 
+    name: sssd-tools 
+    state: installed
+    update_cache: yes
+  when: ansible_distribution_major_version == '7'
+  tags:
+    - sssd-conf
+    - setup-sssd
+
+- name: "create cacerts directory for sssd"
+  file: 
+    path: /etc/openldap/cacerts
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+  tags:
+    - sssd-conf
+    - setup-sssd
+
+- name: "deploy sssd related files"
+  template: 
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+    backup: "{{ item.backup }}"
+  with_items:
+    - { src: 'sssd/sssd.conf.j2', dest: '/etc/sssd/sssd.conf', owner: 'root', group: 'root', mode: '0600', backup: 'yes' }
+    - { src: 'sssd/nsswitch.conf.j2', dest: '/etc/nsswitch.conf', owner: 'root', group: 'root', mode: '0644', backup: 'yes' }
+    - { src: 'sssd/system-auth-ac.j2', dest: '/etc/pam.d/system-auth-ac', owner: 'root', group: 'root', mode: '0644', backup: 'yes' }
+    - { src: 'sssd/password-auth-ac.j2', dest: '/etc/pam.d/password-auth-ac', owner: 'root', group: 'root', mode: '0644', backup: 'yes' }
+    - { src: 'sssd/paypal-ldap-ca.crt', dest: '/etc/openldap/cacerts/paypal-ldap-ca.crt', owner: 'root', group: 'root', mode: '0644', backup: 'no' }
+  notify: restart sssd
+  tags:
+    - sssd-conf
+    - setup-sssd
+
+- name: "check for existing /etc/pam.d/{password-auth,system-auth} files"
+  stat: 
+    path: "/etc/pam.d/{{ item }}"
+  with_items:
+    - password-auth
+    - system-auth
+  register: pamd_files
+  tags:
+    - sssd-conf
+    - setup-sssd
+    - setup-sssd-link
+
+- name: "rename /etc/pam.d/{password-auth,system-auth} if present and not soft links"
+  command: mv {{ item.item }} {{ item.item }}.ORIG.0  chdir=/etc/pam.d creates=/etc/pam.d/{{ item.item }}.ORIG.0
+  with_items:
+    - "{{ pamd_files.results }}"
+  when:
+    - item.stat.exists
+    - item.stat.isreg
+    - not item.stat.islnk
+  tags:
+    - sssd-conf
+    - setup-sssd
+    - setup-sssd-link
+
+- name: "create soft link to /etc/pam.d/{password-auth,system-auth}-ac"
+  file: 
+    src: "{{ item.item }}-ac"
+    dest: "{{ item.stat.path }}"
+    owner: root
+    group: root
+    state: link
+  with_items:
+    - "{{ pamd_files.results }}"
+  tags:
+    - sssd-conf
+    - setup-sssd
+    - setup-sssd-link
+
+- name: "start sssd service"
+  service: 
+    name: sssd
+    state: started
+    enabled: yes
+  tags:
+    - sssd-conf
+    - setup-sssd
+
+
+
+## update sssd if flagged to do so
+- name: "update sssd pkgs"
+  yum: 
+    name: sssd
+    disablerepo: "*" 
+    enablerepo: "OS,OS-updates"
+    state: latest
+    update_cache: yes
+  register: updatepkg
+  when: upgrade_sssd_is_enabled
+  tags:
+    - update-sssd-rpm
+    - upgrade-sssd
+
+- debug: var=updatepkg
+  when: upgrade_sssd_is_enabled
+  tags:
+    - update-sssd-rpm
+    - upgrade-sssd
+
+- name: "stop sssd service after update"
+  service: 
+    name: sssd
+    state: stopped
+  when: updatepkg.changed
+  tags:
+    - stop-sssd
+    - upgrade-sssd
+
+- name: "clean-up sssd db files after update"
+  file: 
+    path: "/var/lib/sss/db/{{ item }}"
+    state: absent
+  with_items:
+    - config.ldb
+    - sssd.ldb
+    - cache_LDAP.ldb
+  when: updatepkg.changed
+  tags:
+    - cleanup-sssd-files
+    - upgrade-sssd
+
+- name: "start sssd service after update"
+  service:
+    name: sssd 
+    state: started
+    enabled: yes
+  when: updatepkg.changed
+  tags:
+    - start-sssd
+    - upgrade-sssd
+    
+ ##
