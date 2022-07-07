@@ -70,7 +70,7 @@
     - { src: 'sssd/nsswitch.conf.j2', dest: '/etc/nsswitch.conf', owner: 'root', group: 'root', mode: '0644', backup: 'yes' }
     - { src: 'sssd/system-auth-ac.j2', dest: '/etc/pam.d/system-auth-ac', owner: 'root', group: 'root', mode: '0644', backup: 'yes' }
     - { src: 'sssd/password-auth-ac.j2', dest: '/etc/pam.d/password-auth-ac', owner: 'root', group: 'root', mode: '0644', backup: 'yes' }
-    - { src: 'sssd/paypal-ldap-ca.crt', dest: '/etc/openldap/cacerts/paypal-ldap-ca.crt', owner: 'root', group: 'root', mode: '0644', backup: 'no' }
+    - { src: 'sssd/ldap-ca.crt', dest: '/etc/openldap/cacerts/ldap-ca.crt', owner: 'root', group: 'root', mode: '0644', backup: 'no' }
   notify: restart sssd
   tags:
     - sssd-conf
