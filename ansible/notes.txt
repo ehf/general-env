@@ -67,3 +67,14 @@
         
         
         
+#####
+
+
+- name: "Group nodes by OS distribution"
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: group hosts by distribution
+      group_by: 
+        key: "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
+      changed_when: false
