@@ -78,3 +78,42 @@
       group_by: 
         key: "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
       changed_when: false
+
+
+
+####
+
+- hosts: all 
+  gather_facts: False
+  pre_tasks:
+    - name: "setup pre-task command" 
+      setup:
+        filter: ansible_distribution
+       vars:
+         ansible_password: '{{ lookup("env", "ANSIBLE_PASSWORD") }}'
+  tasks:
+    - name: "command task"
+      command:
+        cmd: uptime 
+        
+        
+####
+######## doesn't work 
+- hosts: all 
+  gather_facts: False
+  pre_tasks:
+    - name: "setup pre-task command" 
+      setup:
+        filter: ansible_distribution
+       vars:
+         ansible_password: "{{ item }}"
+       loop:
+         - pass1
+         - pass2
+         - pass3
+        ignore_errors: True
+  tasks:
+    - name: "command task"
+      command:
+        cmd: uptime 
+        
