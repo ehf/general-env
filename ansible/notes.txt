@@ -91,6 +91,7 @@
         filter: ansible_distribution
        vars:
          ansible_password: '{{ lookup("env", "ANSIBLE_PASSWORD") }}'
+       no_log: True
   tasks:
     - name: "command task"
       command:
@@ -112,6 +113,7 @@
          - pass2
          - pass3
         ignore_errors: True
+        no_log: True
   tasks:
     - name: "command task"
       command:
