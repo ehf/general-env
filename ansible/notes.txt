@@ -127,3 +127,18 @@
       command:
         cmd: uptime 
         
+
+### 
+## ansible-cmd example 
+
+mkdir test-cmdb 
+cd test-cmdb
+ansible -i list-nmap.yml -m setup --tree out/ all --list-hosts
+ansible -i list-nmap.yml -m setup --tree out/ all
+ansible -i list-nmap.yml -m package_facts --tree out_pkg_facts/ all
+
+cd out_pkg_facts
+sed -i 's/ansible_facts/custom_facts/g' ./host-pkg-facts-file.json
+cd ..
+ansible-cmdb -t html_fancy_split -p local_js=1,skip_empty=1 out/ out_pkg_facts/
+
