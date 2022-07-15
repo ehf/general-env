@@ -69,7 +69,7 @@
         
 #####
 
-
+---
 - name: "Group nodes by OS distribution"
   hosts: all
   gather_facts: true
@@ -78,6 +78,14 @@
       group_by: 
         key: "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
       changed_when: false
+
+- name: "work on the rhel based OS"
+  hosts: RedHat_7:CentOS_7:RedHat_8:CentOS_8
+  gather_facts: false
+  tasks:
+    - name: "a command"
+      command:
+        cmd: uptime
 
 
 
